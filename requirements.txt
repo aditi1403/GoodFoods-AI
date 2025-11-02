@@ -1,0 +1,10 @@
+# Python 3.13.0
+streamlit
+pandas
+sqlite-utils
+faker
+sentence-transformers
+faiss-cpu
+transformers
+torch
+requests
