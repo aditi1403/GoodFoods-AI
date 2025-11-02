@@ -8,3 +8,5 @@ faiss-cpu
 transformers
 torch
 requests
+sqlalchemy
+dotenv
