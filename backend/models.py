@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from backend.db import Base
+from db.db import Base
 
 class Restaurant(Base):
     __tablename__ = "restaurants"

@@ -1,5 +1,5 @@
 from .llm_interface import query_llm_json
-from .db import SessionLocal, engine
+from ..db.db import SessionLocal, engine
 from . import crud, models
 from datetime import datetime
 import json

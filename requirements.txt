@@ -11,3 +11,4 @@ requests
 sqlalchemy
 dotenv
 fastapi
+psycopg2-binary

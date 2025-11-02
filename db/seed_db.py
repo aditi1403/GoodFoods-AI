@@ -3,7 +3,7 @@ import os
 import random
 from faker import Faker
 from datetime import time
-from backend.db import engine, SessionLocal
+from db.db import engine, SessionLocal
 from backend import models, crud
 
 def seed_restaurants(n=100):
