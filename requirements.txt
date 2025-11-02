@@ -10,3 +10,4 @@ torch
 requests
 sqlalchemy
 dotenv
+fastapi
