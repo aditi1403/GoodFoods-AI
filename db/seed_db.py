@@ -1,4 +1,3 @@
-# scripts/seed_db.py
 import os
 import random
 from faker import Faker

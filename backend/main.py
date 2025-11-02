@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from ..db.db import get_db, engine
+from db.db import get_db, engine
 from . import models, crud
 from sqlalchemy.orm import Session
 from pydantic import BaseModel

@@ -1,5 +1,4 @@
-# backend/llm_interface.py
-import subprocess, json, os, logging
+import subprocess, json, os, logging, re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,14 +15,39 @@ def query_llm(prompt: str, model: str = None) -> str:
         logger.error("Ollama call failed: %s", e.stderr)
         return ""
 
+def safe_parse_response(response_text: str):
+    """
+    Try to parse valid JSON; if invalid, sanitize and retry.
+    Returns dict or {'raw': ...}
+    """
+    if not response_text:
+        return {"raw": ""}
+    try:
+        return json.loads(response_text)
+    except json.JSONDecodeError:
+        # Extract JSON substring if model added extra text
+        match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if match:
+            try:
+                cleaned = match.group(0)
+                return json.loads(cleaned)
+            except json.JSONDecodeError:
+                pass
+        # Last fallback: strip code blocks, try again
+        cleaned = (
+            response_text.replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
+        try:
+            return json.loads(cleaned)
+        except Exception:
+            logger.warning("LLM response not valid JSON. Returning {'raw': ...}")
+            return {"raw": response_text}
+
 def query_llm_json(prompt: str, model: str = None):
     """
-    Instruct the model to return JSON; if parsing fails, return raw text under "raw".
-    Use concise system prompt wrappers when calling from middleware.
+    Force the model to return valid JSON.
     """
     raw = query_llm(prompt, model)
-    try:
-        return json.loads(raw)
-    except Exception:
-        logger.warning("LLM response not valid JSON. Returning {'raw': ...}")
-        return {"raw": raw}
+    return safe_parse_response(raw)
